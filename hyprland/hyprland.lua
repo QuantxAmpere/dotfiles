@@ -15,8 +15,14 @@ hl.bind('SUPER + SHIFT + Return', hl.dsp.exec_cmd('fuzzel'))
 hl.bind('SUPER + Q', hl.dsp.window.close())
 hl.bind('SUPER + M', hl.dsp.exit())
 
--- Super + left-click drag works for hy3 and floating windows.
+-- Floating lets you freely position a window outside hy3's tiling tree.
+hl.bind('SUPER + F', hl.dsp.window.float({ action = 'toggle' }))
+hl.bind('SUPER + G', hl.dsp.window.fullscreen({ mode = 'fullscreen', action = 'toggle' }))
+
+-- Native mouse binds: move with Super + left drag, resize with Super + right drag.
+-- For free positioning (rather than tiled layout behavior), float first with Super + F.
 hl.bind('SUPER + mouse:272', hl.dsp.window.drag(), { mouse = true })
+hl.bind('SUPER + mouse:273', hl.dsp.window.resize(), { mouse = true })
 
 -- hy3 exposes its Lua dispatchers after the plugin loads.
 if hl.plugin.hy3 then

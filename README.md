@@ -19,3 +19,16 @@ The hy3 binary is Nix-managed, with a stable link at
 This directory is prepared for promotion to the public
 `QuantxAmpere/dotfiles` Git submodule by `scripts/publish-dotfiles.sh`.
 Do not add credentials or machine-specific secrets to it.
+
+## Hyprland window shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| Super + F | Toggle floating for the focused window |
+| Super + G | Toggle fullscreen for the focused window |
+| Super + left mouse drag | Move the window under the pointer |
+| Super + right mouse drag | Resize the window under the pointer |
+
+Hy3 tiles windows by default. For freely dragging a window to an arbitrary
+position, press Super + F to make it floating, then use Super + left drag.
+For a newly cloned submodule, use `git submodule update --init --recursive`.
