@@ -1,0 +1,2 @@
+-- Place your existing Neovim Lua configuration and modules in this directory.
+-- Home Manager links the entire directory: edits do not require a Nix rebuild.
