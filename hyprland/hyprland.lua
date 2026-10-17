@@ -2,7 +2,7 @@
 -- The plugin symlink is managed by home/hyprland.nix.
 
 -- Monitor rules are in a separate, live-editable file.
-require('monitors')
+require('monitors/main')
 local plugin = os.getenv('HOME') .. '/.local/share/hyprland-plugins/libhy3.so'
 
 -- Plugin loading is declarative; Hyprland reloads Lua after it is available.

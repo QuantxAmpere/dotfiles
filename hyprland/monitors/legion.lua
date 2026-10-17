@@ -1,22 +1,8 @@
--- Dynamic monitor configuration for Legion, Framework, and random projectors.
--- Uses Hyprland's built-in Lua monitor API (no daemon or shell script).
---
--- On hotplug, choose the largest available resolution, then the highest
--- refresh rate at that resolution. Outputs are laid out left-to-right.
--- Connector order may not match desk position; adjust home_order below once
--- the Legion's physical connector names are known.
-
+-- Legion 5 Pro: internal screen, docked external displays, and projectors.
+-- On hotplug, choose maximum resolution, then maximum refresh at that
+-- resolution. Outputs are arranged left-to-right in connector order.
+-- Set home_order below once the physical port identities are known.
 hl.monitor({ output = '', mode = 'preferred', position = 'auto', scale = 1 })
-
-local host_file = io.open('/etc/hostname', 'r')
-local host = host_file and host_file:read('*l') or os.getenv('HOSTNAME')
-if host_file then host_file:close() end
-
-if host == 'framework' then
-    -- Hyprland's fallback headless output, when no real monitor is connected.
-    -- A future VNC-specific REMOTE output can coexist with physical monitors.
-    hl.monitor({ output = 'HEADLESS-0', mode = '2560x1440@60', position = '0x0', scale = 1 })
-end
 
 local home_order = {
     -- Fill with Legion's actual left/center/right connector names after
@@ -74,7 +60,7 @@ local function apply()
     local internal, external = nil, {}
 
     for _, monitor in ipairs(monitors) do
-        if is_internal(monitor.name) and host == 'legion' then
+        if is_internal(monitor.name) then
             internal = monitor
         elseif not is_virtual(monitor.name) then
             table.insert(external, monitor)
@@ -90,7 +76,7 @@ local function apply()
 
     -- Keep an active screen if the lid is closed without any external output.
     -- This also recovers from unplugging a dock before opening the lid.
-    local disable_internal = host == 'legion' and current_lid_state() and #external > 0
+    local disable_internal = current_lid_state() and #external > 0
     local x = 0
 
     if internal then
@@ -147,14 +133,12 @@ hl.on('monitor.added', schedule)
 hl.on('monitor.removed', schedule)
 -- Do not react to layout_changed: our own mode updates trigger it.
 
-if host == 'legion' then
-    -- The switch name is hardware-dependent: inspect `hyprctl devices`.
-    hl.bind('switch:on:Lid Switch', function()
-        lid_override = true
-        schedule()
-    end, { locked = true })
-    hl.bind('switch:off:Lid Switch', function()
-        lid_override = false
-        schedule()
-    end, { locked = true })
-end
+-- The switch name is hardware-dependent: inspect `hyprctl devices`.
+hl.bind('switch:on:Lid Switch', function()
+    lid_override = true
+    schedule()
+end, { locked = true })
+hl.bind('switch:off:Lid Switch', function()
+    lid_override = false
+    schedule()
+end, { locked = true })
