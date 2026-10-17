@@ -32,3 +32,30 @@ Do not add credentials or machine-specific secrets to it.
 Hy3 tiles windows by default. For freely dragging a window to an arbitrary
 position, press Super + F to make it floating, then use Super + left drag.
 For a newly cloned submodule, use `git submodule update --init --recursive`.
+
+## Monitor profiles
+
+`hyprland/monitors.lua` is loaded by `hyprland.lua` and applies to both hosts:
+
+- **Legion alone:** built-in panel at its highest-resolution/highest-refresh mode
+  (normally 2560x1600@165).
+- **Legion + projector:** internal panel and whatever external monitor is plugged
+  in. Projectors are not forced to use the home-dock resolution.
+- **Legion docked, lid closed:** disable the internal output if an external one
+  exists. Position external displays left-to-right at each display's native
+  resolution and highest refresh available at that resolution (normally
+  3 x 2560x1440@144). Never disable the last active physical output.
+- **Framework:** select native maximum resolution then the highest refresh rate
+  supported there (e.g. 2560x1440@60 or @144).
+- **Framework headless:** Hyprland's auto-created HEADLESS-0 uses
+  2560x1440@60. No VNC service is started automatically yet.
+
+The order of the Legion's three external screens currently defaults to connector
+name order. Put actual connector names in `home_order` in `monitors.lua`
+after identifying which screen is physically left, center, and right.
+
+Verify with `hyprctl monitors all` and `hyprctl configerrors`. Reload with
+`hyprctl reload` after editing. To test laptop lid switches, first check
+`hyprctl devices` for the actual switch name (expected `Lid Switch`).
+The existing NixOS laptop power policy still controls whether closing the lid
+suspends the machine.
