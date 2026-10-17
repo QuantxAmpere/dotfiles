@@ -7,7 +7,9 @@ Native application configuration shared between NixOS and other Linux hosts.
 - `kitty/`: Kitty terminal configuration (starter placeholder)
 
 On NixOS, Home Manager creates **out-of-store symlinks** into this checkout.
-Expected checkout: `~/dotfiles`.
+On Framework, the single group-shared checkout is `/shared/dotfiles`, with
+`~/dotfiles` symlinks for both `ma` and `ma-local`. Other machines may keep
+the usual `~/dotfiles` checkout.
 
 Changes to these files are live; Hyprland typically reloads on save, while
 some application changes require reloading or restarting the app. Nix rebuilds

@@ -8,7 +8,11 @@ local profiles = {
     legion = 'monitors/legion',
 }
 
-local profile = profiles[hostname]
+-- The dedicated VNC compositor is headless even though its host is framework.
+-- Its systemd service sets this flag; ma-local does not.
+local profile = os.getenv('HYPRLAND_REMOTE_SESSION') == '1'
+    and 'monitors/headless'
+    or profiles[hostname]
 if profile then
     require(profile)
 else
