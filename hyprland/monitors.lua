@@ -145,7 +145,7 @@ end
 hl.on('hyprland.start', schedule)
 hl.on('monitor.added', schedule)
 hl.on('monitor.removed', schedule)
-hl.on('monitor.layout_changed', schedule)
+-- Do not react to layout_changed: our own mode updates trigger it.
 
 if host == 'legion' then
     -- The switch name is hardware-dependent: inspect `hyprctl devices`.

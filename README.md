@@ -16,9 +16,8 @@ are still needed for changes to packages or their integrations.
 The hy3 binary is Nix-managed, with a stable link at
 `~/.local/share/hyprland-plugins/libhy3.so`.
 
-This directory is prepared for promotion to the public
-`QuantxAmpere/dotfiles` Git submodule by `scripts/publish-dotfiles.sh`.
-Do not add credentials or machine-specific secrets to it.
+This is an independent public repository, cloned at `~/dotfiles` next to
+`~/nixos-config`. Do not add credentials or machine-specific secrets.
 
 ## Hyprland window shortcuts
 
@@ -31,7 +30,7 @@ Do not add credentials or machine-specific secrets to it.
 
 Hy3 tiles windows by default. For freely dragging a window to an arbitrary
 position, press Super + F to make it floating, then use Super + left drag.
-For a newly cloned submodule, use `git submodule update --init --recursive`.
+Pull changes directly with `git -C ~/dotfiles pull --ff-only`.
 
 ## Monitor profiles
 
