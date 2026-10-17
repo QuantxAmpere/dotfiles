@@ -1,7 +1,7 @@
 -- Framework i5-1240P: physical monitor or headless home server.
--- Prioritize the highest advertised refresh rate, even when that trades
--- resolution for Hz. Hyprland picks a supported mode for each monitor.
-hl.monitor({ output = '', mode = 'highrr', position = 'auto', scale = 1 })
+-- Prefer the highest supported resolution, then the highest refresh rate
+-- at that resolution (e.g. 2560x1440@144 over 1920x1080@165).
+hl.monitor({ output = '', mode = 'highres', position = 'auto', scale = 1 })
 
 -- Default virtual display when Hyprland creates its fallback HEADLESS-0.
 -- This does not create a virtual output or start a VNC server.

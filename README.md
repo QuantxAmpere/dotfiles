@@ -37,8 +37,8 @@ Pull changes directly with `git -C ~/dotfiles pull --ff-only`.
 `hyprland.lua` loads `monitors/main.lua`, which chooses a profile using
 `/etc/hostname`. Host-specific behavior is isolated in:
 
-- `monitors/framework.lua` — highest available refresh rate on physical
-  monitors, with a 2560x1440@60 rule for Hyprland's fallback headless output.
+- `monitors/framework.lua` — highest resolution, then highest refresh rate
+  at that resolution, with a 2560x1440@60 rule for the fallback headless output.
 - `monitors/legion.lua` — native-resolution-first mode selection, hotplug,
   projector support, external-monitor arrangement and lid switching.
 
@@ -52,9 +52,9 @@ The resulting behavior:
   exists. Position external displays left-to-right at each display's native
   resolution and highest refresh available at that resolution (normally
   3 x 2560x1440@144). Never disable the last active physical output.
-- **Framework:** prioritize the highest supported refresh rate (`highrr`),
-  including 2560x1440@144 when supported. Note that a lower-resolution,
-  higher-Hz mode takes priority over a higher-resolution, lower-Hz mode.
+- **Framework:** prioritize the highest supported resolution (`highres`),
+  then the highest refresh rate at that resolution (e.g. 2560x1440@144
+  instead of 1920x1080@165, where available).
 - **Framework headless:** Hyprland's auto-created HEADLESS-0 uses
   2560x1440@60. No VNC service is started automatically yet.
 
