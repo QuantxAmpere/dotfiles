@@ -57,8 +57,9 @@ The resulting behavior:
 - **Framework:** prioritize the highest supported resolution (`highres`),
   then the highest refresh rate at that resolution (e.g. 2560x1440@144
   instead of 1920x1080@165, where available).
-- **Framework headless:** Hyprland's auto-created HEADLESS-0 uses
-  2560x1440@60. No VNC service is started automatically yet.
+- **Framework headless:** The persistent `ma` Hyprland session's HEADLESS-0
+  uses 2560x1440@144 for Sunshine/Moonlight; WayVNC remains as a fallback.
+  Both services are configured in the private `nixos-config` repository.
 
 The order of the Legion's three external screens currently defaults to connector
 name order. Put actual connector names in `home_order` in `monitors/legion.lua`
