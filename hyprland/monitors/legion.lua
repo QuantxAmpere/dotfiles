@@ -62,6 +62,10 @@ local function lid_closed()
     return false
 end
 
+-- Disabled outputs are omitted from get_monitors() in Hyprland 0.55/0.56.
+-- Remember the connector so opening the lid (or unplugging a dock) can
+-- enable the panel again without requiring a restart.
+local internal_name = nil
 local lid_override = nil -- updated by lid switch events in this session
 local function current_lid_state()
     if lid_override ~= nil then return lid_override end
@@ -75,6 +79,7 @@ local function apply()
     for _, monitor in ipairs(monitors) do
         if is_internal(monitor.name) then
             internal = monitor
+            internal_name = monitor.name
         elseif not is_virtual(monitor.name) then
             table.insert(external, monitor)
         end
@@ -92,11 +97,15 @@ local function apply()
     local disable_internal = current_lid_state() and #external > 0
     local x = 0
 
+    if not internal and internal_name and not disable_internal then
+        -- Re-enable a previously disabled panel; a subsequent monitor.added
+        -- event will reapply the complete layout with its actual dimensions.
+        hl.monitor({ output = internal_name, mode = 'highres', position = '0x0', scale = 1, disabled = false })
+    end
+
     if internal then
         if disable_internal then
-            if internal.enabled then
-                hl.monitor({ output = internal.name, disabled = true })
-            end
+            hl.monitor({ output = internal.name, disabled = true })
         else
             local mode, spec = best_mode(internal)
             if mode then
