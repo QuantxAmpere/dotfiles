@@ -8,6 +8,12 @@
 -- available_modes so the per-output logic below can refine the layout.
 hl.monitor({ output = '', mode = 'highres', position = 'auto', scale = 1 })
 
+-- On clickpads, libinput's bottom software-button zones can exclude fingers
+-- from pinch recognition, turning some pinches into scroll/pointer motion.
+-- Clickfinger uses finger count for physical clicks instead of bottom zones.
+-- This affects only the Legion (this module is loaded by its host profile).
+hl.config({ input = { touchpad = { clickfinger_behavior = true } } })
+
 local home_order = {
     -- Fill with Legion's actual left/center/right connector names after
     -- checking `hyprctl monitors all`, for example: 'DP-2', 'DP-1', 'DP-3'.
