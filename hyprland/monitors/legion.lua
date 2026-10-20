@@ -2,7 +2,11 @@
 -- On hotplug, choose maximum resolution, then maximum refresh at that
 -- resolution. Outputs are arranged left-to-right in connector order.
 -- Set home_order below once the physical port identities are known.
-hl.monitor({ output = '', mode = 'preferred', position = 'auto', scale = 1 })
+-- Native 'highres' works on Hyprland 0.55 too (highest resolution, then
+-- highest refresh). 'preferred' can select 60 Hz on the built-in panel.
+-- Keep this as the initial/hotplug fallback; 0.56 additionally exposes
+-- available_modes so the per-output logic below can refine the layout.
+hl.monitor({ output = '', mode = 'highres', position = 'auto', scale = 1 })
 
 local home_order = {
     -- Fill with Legion's actual left/center/right connector names after
@@ -32,7 +36,16 @@ local function best_mode(monitor)
             end
         end
     end
-    if not best then return nil end
+    if not best then
+        -- Hyprland 0.55's Lua API has no available_modes. Use the compositor's
+        -- built-in selector while keeping the current width for positioning.
+        if not monitor.width or not monitor.height then return nil end
+        return {
+            width = monitor.width,
+            height = monitor.height,
+            refresh_rate = monitor.refresh_rate,
+        }, 'highres'
+    end
     return best, string.format('%dx%d@%.2f', best.width, best.height, best.refresh_rate)
 end
 
@@ -87,7 +100,7 @@ local function apply()
         else
             local mode, spec = best_mode(internal)
             if mode then
-                local needs_update = not internal.enabled
+                local needs_update = internal.enabled == false
                     or internal.width ~= mode.width
                     or internal.height ~= mode.height
                     or math.abs(internal.refresh_rate - mode.refresh_rate) > 0.2
@@ -104,7 +117,7 @@ local function apply()
         local mode, spec = best_mode(monitor)
         if mode then
             local target_position = string.format('%dx0', x)
-            local needs_update = not monitor.enabled
+            local needs_update = monitor.enabled == false
                 or monitor.width ~= mode.width
                 or monitor.height ~= mode.height
                 or math.abs(monitor.refresh_rate - mode.refresh_rate) > 0.2
