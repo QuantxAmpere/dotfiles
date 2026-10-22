@@ -174,6 +174,8 @@ def main():
         path.write_text(json.dumps(state))
         if action == "sync":
             return
+        # Sync may have changed the active workspace IDs on every output.
+        monitors = monitor_list()
         try:
             number = int(sys.argv[2])
             digit = int(sys.argv[3]) if "workspace" in action else None
