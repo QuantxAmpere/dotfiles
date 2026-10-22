@@ -61,3 +61,6 @@ if hl.plugin.hy3 then
     hl.bind('SUPER + A', hy3.change_focus('raise'))
     hl.bind('SUPER + Z', hy3.change_focus('lower'))
 end
+
+-- Numbered physical monitors and one-shot workspace selection submaps.
+require('workspaces')
