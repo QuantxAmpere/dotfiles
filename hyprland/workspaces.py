@@ -61,9 +61,13 @@ def monitor_list():
     monitors = [m for m in query("monitors") if not m.get("disabled") and not m.get("mirrorOf")]
     physical = [m for m in monitors if not m["name"].startswith(("HEADLESS-", "WAYLAND-"))
                 and m["name"] != "REMOTE"]
-    # The remote Weston compositor is virtual by design: treat HEADLESS-0
-    # as its sole logical workspace group rather than exposing Weston.
-    chosen = physical or [m for m in monitors if m["name"].startswith("HEADLESS-")] or monitors
+    # The independent remote compositor initially exposes a Weston-backed
+    # WAYLAND output. Do not number it: the real VNC output appears later.
+    if os.getenv("HYPRLAND_REMOTE_SESSION") == "1":
+        chosen = [m for m in monitors if m["name"].startswith("HEADLESS-")
+                  or m["name"] == "REMOTE"]
+    else:
+        chosen = physical or [m for m in monitors if m["name"].startswith("HEADLESS-")] or monitors
     external = sorted(
         [m for m in chosen if not m["name"].startswith("eDP-")],
         key=lambda m: (m["x"], m["y"], m["name"]),
