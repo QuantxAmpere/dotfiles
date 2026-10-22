@@ -1,6 +1,9 @@
 -- Native Hyprland Lua config. Nix/Home Manager only installs and links it.
 -- The plugin symlink is managed by home/hyprland.nix.
 
+-- Remove the random splash text Hyprland draws at the bottom of the screen.
+hl.config({ misc = { disable_splash_rendering = true } })
+
 -- Monitor rules are in a separate, live-editable file.
 require('monitors/main')
 
