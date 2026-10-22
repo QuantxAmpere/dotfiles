@@ -27,7 +27,8 @@ hl.define_submap('workspace_monitors', function()
         hl.bind('SHIFT + ' .. monitor, hl.dsp.submap('workspace_move_digits_' .. monitor))
     end
     hl.bind('escape', hl.dsp.submap('reset'))
-    hl.bind('catchall', hl.dsp.submap('reset'))
+    -- No catchall here: Hyprland queues it next to the digit bind and
+    -- immediately resets the submap the digit just entered.
 end)
 
 for monitor = 1, 4 do
