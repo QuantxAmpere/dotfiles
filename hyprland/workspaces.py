@@ -87,7 +87,7 @@ def owner_for(wid, monitor, old_slots, owners):
             if name:
                 return name, wid % 10
         if 1 <= wid <= 9:  # First activation of this configuration.
-            return monitor, 1
+            return monitor, wid
     return None, None
 
 
