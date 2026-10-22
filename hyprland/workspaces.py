@@ -58,7 +58,8 @@ def cursor_move(x, y):
 
 
 def monitor_list():
-    monitors = [m for m in query("monitors") if not m.get("disabled") and not m.get("mirrorOf")]
+    monitors = [m for m in query("monitors")
+                if not m.get("disabled") and m.get("mirrorOf") in (None, "", "none")]
     physical = [m for m in monitors if not m["name"].startswith(("HEADLESS-", "WAYLAND-"))
                 and m["name"] != "REMOTE"]
     # The independent remote compositor initially exposes a Weston-backed
@@ -91,7 +92,7 @@ def owner_for(wid, monitor, old_slots, owners):
             if name:
                 return name, wid % 10
         if 1 <= wid <= 9:  # First activation of this configuration.
-            return monitor, wid
+            return monitor, 1  # Hyprland auto-assigns 1,2,3,4 to displays on startup.
     return None, None
 
 
