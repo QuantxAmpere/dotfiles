@@ -13,6 +13,8 @@ hl.plugin.load(plugin)
 
 hl.on('hyprland.start', function()
     hl.exec_cmd('kitty --class HeadlessKitty --single-instance --start-as=hidden tail -f /dev/null')
+    -- Home Manager provides Waybar on local and headless sessions alike.
+    hl.exec_cmd('waybar')
 end)
 
 -- General shortcuts work even if hy3 is temporarily unavailable.
