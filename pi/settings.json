@@ -2,7 +2,7 @@
   "$schema": "https://pi.dev/schemas/settings.schema.json",
   "defaultProvider": "commandcode",
   "defaultModel": "deepseek/deepseek-v4.1-flash",
-  "defaultThinkingLevel": "low",
+  "defaultThinkingLevel": "xhigh",
   "lastChangelogVersion": "0.75.4",
   "packages": [
     "npm:@dietrichgebert/ponytail",
