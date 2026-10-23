@@ -4,6 +4,7 @@
   "defaultModel": "deepseek/deepseek-v4.1-flash",
   "defaultThinkingLevel": "xhigh",
   "lastChangelogVersion": "0.75.4",
+  "theme": "current",
   "packages": [
     "npm:@dietrichgebert/ponytail",
     "npm:pi-web-access"
