@@ -70,3 +70,23 @@ end
 
 -- Numbered physical monitors and one-shot workspace selection submaps.
 require('workspaces')
+
+
+
+
+
+
+
+-- some styling
+
+hl.config({
+    decoration = {
+        rounding = 10,
+	rounding_power = 2.0,
+    }
+})
+
+
+
+
+
