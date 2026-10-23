@@ -5,6 +5,7 @@ Native application configuration shared between NixOS and other Linux hosts.
 - `hyprland/hyprland.lua`: Hyprland + hy3 shortcuts and settings
 - `nvim/`: Neovim Lua configuration (starter placeholder; import existing files)
 - `kitty/`: Kitty terminal configuration (starter placeholder)
+- `mako/`: notification daemon configuration
 
 On NixOS, Home Manager creates **out-of-store symlinks** into this checkout.
 On Framework, the single group-shared checkout is `/shared/dotfiles`, with
