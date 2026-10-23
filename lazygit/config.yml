@@ -1,0 +1,17 @@
+git:
+  log:
+    order: topo-order
+    showGraph: always
+    showWholeGraph: true
+
+  branchLogCmd: git log --graph --all --color=always --abbrev-commit --decorate --pretty=format:'%C(auto)%h%d %s %C(dim white)(%an)%C(reset)'
+
+  allBranchesLogCmds:
+    # 1. Compact graph, all branches
+    - git log --graph --all --color=always --abbrev-commit --decorate --oneline
+
+    # 2. Full graph, all branches
+    - git log --graph --all --color=always --abbrev-commit --decorate --date=relative --pretty=medium
+
+    # 3. Current checked-out branch only
+    - git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium HEAD --
