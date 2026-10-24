@@ -3,7 +3,8 @@
 Native application configuration shared between NixOS and other Linux hosts.
 
 - `hyprland/hyprland.lua`: Hyprland + hy3 shortcuts and settings
-- `nvim/`: Neovim Lua configuration (starter placeholder; import existing files)
+- `nvim/`: Neovim Lua configuration (built-in plugin manager; language servers
+  come from Nix via `modules/features/neovim.nix`)
 - `kitty/`: Kitty terminal configuration (starter placeholder)
 - `mako/`: notification daemon configuration
 
