@@ -16,9 +16,9 @@ local plugin = os.getenv('HOME') .. '/.local/share/hyprland-plugins/libhy3.so'
 hl.plugin.load(plugin)
 
 hl.on('hyprland.start', function()
-    hl.exec_cmd('kitty --class HeadlessKitty --single-instance --start-as=hidden tail -f /dev/null')
-    -- Home Manager provides Waybar on local and headless sessions alike.
-    hl.exec_cmd('waybar')
+  hl.exec_cmd('kitty --class HeadlessKitty --single-instance --start-as=hidden tail -f /dev/null')
+  -- Home Manager provides Waybar on local and headless sessions alike.
+  hl.exec_cmd('waybar')
 end)
 
 -- General shortcuts work even if hy3 is temporarily unavailable.
@@ -31,6 +31,11 @@ hl.bind('SUPER + M', hl.dsp.exit())
 hl.bind('SUPER + F', hl.dsp.window.float({ action = 'toggle' }))
 hl.bind('SUPER + G', hl.dsp.window.fullscreen({ mode = 'fullscreen', action = 'toggle' }))
 
+-- Multimedia keys: grab them here so apps don't receive raw key events.
+hl.bind('XF86AudioMute', hl.dsp.exec_cmd('wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'))
+hl.bind('XF86AudioLowerVolume', hl.dsp.exec_cmd('wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%-'), { repeating = true })
+hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+'), { repeating = true })
+
 -- Native mouse binds: move with Super + left drag, resize with Super + right drag.
 -- For free positioning (rather than tiled layout behavior), float first with Super + F.
 hl.bind('SUPER + mouse:272', hl.dsp.window.drag(), { mouse = true })
@@ -38,34 +43,34 @@ hl.bind('SUPER + mouse:273', hl.dsp.window.resize(), { mouse = true })
 
 -- hy3 exposes its Lua dispatchers after the plugin loads.
 if hl.plugin.hy3 then
-    local hy3 = hl.plugin.hy3
+  local hy3 = hl.plugin.hy3
 
-    hl.config({
-        general = { layout = 'hy3' },
-        plugin = { hy3 = { node_collapse_policy = 0 } },
-    })
+  hl.config({
+    general = { layout = 'hy3' },
+    plugin = { hy3 = { node_collapse_policy = 0 } },
+  })
 
-    hl.bind('SUPER + T', hy3.change_group('toggletab'))
-    hl.bind('SUPER + H', hy3.change_group('h'))
-    hl.bind('SUPER + V', hy3.change_group('v'))
-    hl.bind('SUPER + R', hy3.change_group('opposite'))
+  hl.bind('SUPER + T', hy3.change_group('toggletab'))
+  hl.bind('SUPER + H', hy3.change_group('h'))
+  hl.bind('SUPER + V', hy3.change_group('v'))
+  hl.bind('SUPER + R', hy3.change_group('opposite'))
 
-    hl.bind('SUPER + SHIFT + T', hy3.make_group('tab'))
-    hl.bind('SUPER + SHIFT + H', hy3.make_group('h'))
-    hl.bind('SUPER + SHIFT + V', hy3.make_group('v'))
+  hl.bind('SUPER + SHIFT + T', hy3.make_group('tab'))
+  hl.bind('SUPER + SHIFT + H', hy3.make_group('h'))
+  hl.bind('SUPER + SHIFT + V', hy3.make_group('v'))
 
-    hl.bind('SUPER + left', hy3.move_focus('l'))
-    hl.bind('SUPER + right', hy3.move_focus('r'))
-    hl.bind('SUPER + up', hy3.move_focus('u'))
-    hl.bind('SUPER + down', hy3.move_focus('d'))
+  hl.bind('SUPER + left', hy3.move_focus('l'))
+  hl.bind('SUPER + right', hy3.move_focus('r'))
+  hl.bind('SUPER + up', hy3.move_focus('u'))
+  hl.bind('SUPER + down', hy3.move_focus('d'))
 
-    hl.bind('SUPER + SHIFT + left', hy3.move_window('l'))
-    hl.bind('SUPER + SHIFT + right', hy3.move_window('r'))
-    hl.bind('SUPER + SHIFT + up', hy3.move_window('u'))
-    hl.bind('SUPER + SHIFT + down', hy3.move_window('d'))
+  hl.bind('SUPER + SHIFT + left', hy3.move_window('l'))
+  hl.bind('SUPER + SHIFT + right', hy3.move_window('r'))
+  hl.bind('SUPER + SHIFT + up', hy3.move_window('u'))
+  hl.bind('SUPER + SHIFT + down', hy3.move_window('d'))
 
-    hl.bind('SUPER + A', hy3.change_focus('raise'))
-    hl.bind('SUPER + Z', hy3.change_focus('lower'))
+  hl.bind('SUPER + A', hy3.change_focus('raise'))
+  hl.bind('SUPER + Z', hy3.change_focus('lower'))
 end
 
 -- Numbered physical monitors and one-shot workspace selection submaps.
@@ -80,13 +85,12 @@ require('workspaces')
 -- some styling
 
 hl.config({
-    decoration = {
-        rounding = 10,
-	rounding_power = 2.0,
-    }
+  decoration = {
+    rounding = 10,
+    rounding_power = 2.0,
+  },
+  general = {
+    gaps_out = 34,
+    gaps_in = 17
+  },
 })
-
-
-
-
-
