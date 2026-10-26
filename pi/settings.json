@@ -8,5 +8,6 @@
   "packages": [
     "npm:@dietrichgebert/ponytail",
     "npm:pi-web-access"
-  ]
+  ],
+  "hideThinkingBlock": true
 }
