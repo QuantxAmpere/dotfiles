@@ -15,6 +15,24 @@ local plugin = os.getenv('HOME') .. '/.local/share/hyprland-plugins/libhy3.so'
 -- Plugin loading is declarative; Hyprland reloads Lua after it is available.
 hl.plugin.load(plugin)
 
+-- Hyprland 0.56.2 reports every kitty window as maximized on map, and kitty
+-- then remembers that in ~/.cache/kitty/main.json, so every later window opens
+-- maximized (full work area inside hy3). Upstream regression, gone in 0.56.1
+-- behaviour; see hyprwm/Hyprland#16404 and kovidgoyal/kitty#10442. Drop this
+-- rule once Hyprland no longer lies to clients.
+hl.window_rule({
+  match = { class = 'kitty' },
+  fullscreen_state = '0 0',
+})
+
+-- Thunar opens as a fixed-size floating window, centered on the active monitor.
+hl.window_rule({
+  match = { class = 'thunar' },
+  size = '1280 720',
+  center = true,
+  float = true,
+})
+
 hl.on('hyprland.start', function()
   hl.exec_cmd('kitty --class HeadlessKitty --single-instance --start-as=hidden tail -f /dev/null')
   -- Home Manager provides Waybar on local and headless sessions alike.
@@ -22,7 +40,7 @@ hl.on('hyprland.start', function()
 end)
 
 -- General shortcuts work even if hy3 is temporarily unavailable.
-hl.bind('SUPER + Return', hl.dsp.exec_cmd('kitty --single-instance'))
+hl.bind('SUPER + Return', hl.dsp.exec_cmd('kitty'))
 hl.bind('SUPER + SHIFT + Return', hl.dsp.exec_cmd('fuzzel'))
 hl.bind('SUPER + Q', hl.dsp.window.close())
 hl.bind('SUPER + M', hl.dsp.exit())
@@ -30,6 +48,7 @@ hl.bind('SUPER + M', hl.dsp.exit())
 -- Floating lets you freely position a window outside hy3's tiling tree.
 hl.bind('SUPER + F', hl.dsp.window.float({ action = 'toggle' }))
 hl.bind('SUPER + G', hl.dsp.window.fullscreen({ mode = 'fullscreen', action = 'toggle' }))
+hl.bind('SUPER + E', hl.dsp.exec_cmd('thunar'))
 
 -- Multimedia keys: grab them here so apps don't receive raw key events.
 hl.bind('XF86AudioMute', hl.dsp.exec_cmd('wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'))
