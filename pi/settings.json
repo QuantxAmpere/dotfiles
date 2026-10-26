@@ -3,7 +3,7 @@
   "defaultProvider": "commandcode",
   "defaultModel": "deepseek/deepseek-v4.1-flash",
   "defaultThinkingLevel": "xhigh",
-  "lastChangelogVersion": "0.75.4",
+  "lastChangelogVersion": "1.4.0",
   "theme": "current",
   "packages": [
     "npm:@dietrichgebert/ponytail",
