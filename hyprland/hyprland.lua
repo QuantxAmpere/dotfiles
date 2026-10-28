@@ -33,11 +33,21 @@ hl.window_rule({
   float = true,
 })
 
+-- Text clipboard history for the picker; images stay with wl-copy.
+-- Guarded because this file also runs on `hyprctl reload`, where
+-- hyprland.start does not fire, and a second watcher would double-store.
+local function ensure_cliphist()
+  hl.exec_cmd([[sh -c 'pgrep -x wl-paste >/dev/null || exec wl-paste --type text --watch cliphist store']])
+end
+
 hl.on('hyprland.start', function()
   hl.exec_cmd('kitty --class HeadlessKitty --single-instance --start-as=hidden tail -f /dev/null')
   -- Home Manager provides Waybar on local and headless sessions alike.
   hl.exec_cmd('waybar')
+  ensure_cliphist()
 end)
+
+ensure_cliphist()
 
 -- General shortcuts work even if hy3 is temporarily unavailable.
 hl.bind('SUPER + Return', hl.dsp.exec_cmd('kitty'))
@@ -50,10 +60,57 @@ hl.bind('SUPER + F', hl.dsp.window.float({ action = 'toggle' }))
 hl.bind('SUPER + G', hl.dsp.window.fullscreen({ mode = 'fullscreen', action = 'toggle' }))
 hl.bind('SUPER + E', hl.dsp.exec_cmd('thunar'))
 
+-- Monocle: float the active window as a centered 2/3 card on its monitor.
+-- hy3 drops the node when a window floats, so unfloating re-inserts it next to
+-- the focused node instead of its old slot. One monocle at a time: pinning
+-- another window puts the previous one back into the layout first.
+local monocle
+local function monocle_restore(address)
+  for _, window in ipairs(hl.get_windows()) do
+    if window.address == address and window.floating then
+      hl.dispatch(hl.dsp.window.float({ action = 'toggle', window = window }))
+    end
+  end
+end
+
+hl.bind('SUPER + K', function()
+  local window = hl.get_active_window()
+  if not window then return end
+
+  if monocle == window.address and window.floating then
+    monocle_restore(monocle)
+    monocle = nil
+    return
+  end
+
+  if monocle then monocle_restore(monocle) end
+
+  local monitor = window.monitor
+  if not monitor then return end
+
+  if not window.floating then
+    hl.dispatch(hl.dsp.window.float({ action = 'toggle', window = window }))
+  end
+  hl.dispatch(hl.dsp.window.resize({
+    x = math.floor(monitor.width * 2 / 3),
+    y = math.floor(monitor.height * 2 / 3),
+    window = window,
+  }))
+  hl.dispatch(hl.dsp.window.center({ window = window }))
+  monocle = window.address
+end)
+
 -- Multimedia keys: grab them here so apps don't receive raw key events.
 hl.bind('XF86AudioMute', hl.dsp.exec_cmd('wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle'))
 hl.bind('XF86AudioLowerVolume', hl.dsp.exec_cmd('wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%-'), { repeating = true })
 hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+'), { repeating = true })
+
+-- Region screenshot to ~/Pictures/Screenshots (timestamped) and the clipboard.
+-- Plain Ctrl+V pastes it; the timestamp filename is what the picker shows.
+hl.bind('SUPER + SHIFT + S', hl.dsp.exec_cmd([[sh -c 'd="$HOME/Pictures/Screenshots"; mkdir -p "$d"; f="$d/$(date +%F_%H.%M.%S).png"; grim -g "$(slurp)" "$f" && wl-copy < "$f"']]))
+
+-- Clipboard history: screenshots with timestamps, then copied text.
+hl.bind('SHIFT + ALT + V', hl.dsp.exec_cmd('$HOME/.config/hypr/clip-pick.sh'))
 
 -- Native mouse binds: move with Super + left drag, resize with Super + right drag.
 -- For free positioning (rather than tiled layout behavior), float first with Super + F.
