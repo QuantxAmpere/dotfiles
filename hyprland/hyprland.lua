@@ -4,6 +4,13 @@
 -- Remove the random splash text Hyprland draws at the bottom of the screen.
 hl.config({ misc = { disable_splash_rendering = true } })
 
+-- Cursor theme for the compositor, Xwayland and everything Hyprland spawns
+-- (slurp draws the selection crosshair from these, so it must match or the
+-- region picker shows the stock cursor). Same values as nixos-config's
+-- XCURSOR_THEME and system-theme's gtk-cursor-theme-name.
+hl.env('XCURSOR_THEME', 'Bibata-Original-Ice')
+hl.env('XCURSOR_SIZE', '40')
+
 -- Monitor rules are in a separate, live-editable file.
 require('monitors/main')
 
@@ -107,7 +114,9 @@ hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('wpctl set-volume -l 1 @DEFAULT_
 
 -- Region screenshot to ~/Pictures/Screenshots (timestamped) and the clipboard.
 -- Plain Ctrl+V pastes it; the timestamp filename is what the picker shows.
-hl.bind('SUPER + SHIFT + S', hl.dsp.exec_cmd([[sh -c 'd="$HOME/Pictures/Screenshots"; mkdir -p "$d"; f="$d/$(date +%F_%H.%M.%S).png"; grim -g "$(slurp)" "$f" && wl-copy < "$f"']]))
+hl.bind('SUPER + SHIFT + S',
+  hl.dsp.exec_cmd(
+  [[sh -c 'd="$HOME/Pictures/Screenshots"; mkdir -p "$d"; f="$d/$(date +%F_%H.%M.%S).png"; grim -g "$(slurp)" "$f" && wl-copy < "$f"']]))
 
 -- Clipboard history: screenshots with timestamps, then copied text.
 hl.bind('SHIFT + ALT + V', hl.dsp.exec_cmd('$HOME/.config/hypr/clip-pick.sh'))
