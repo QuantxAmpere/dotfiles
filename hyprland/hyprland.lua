@@ -40,6 +40,15 @@ hl.window_rule({
   float = true,
 })
 
+-- Wallpaper: swaybg is started by wallpaper.sh, which Super+Shift+Return ->
+-- fuzzel -> "Set Wallpaper" drives. Every apply stores the image in
+-- ~/.local/state/wallpaper, which is what login and new outputs reuse.
+local function apply_wallpaper()
+  hl.exec_cmd([=[sh -c 'p="$HOME/.local/state/wallpaper"; test -s "$p" && exec "$HOME/.config/hypr/wallpaper.sh" "$(cat "$p")"']=])
+end
+
+hl.on('monitor.added', apply_wallpaper)
+
 -- Text clipboard history for the picker; images stay with wl-copy.
 -- Guarded because this file also runs on `hyprctl reload`, where
 -- hyprland.start does not fire, and a second watcher would double-store.
@@ -51,6 +60,7 @@ hl.on('hyprland.start', function()
   hl.exec_cmd('kitty --class HeadlessKitty --single-instance --start-as=hidden tail -f /dev/null')
   -- Home Manager provides Waybar on local and headless sessions alike.
   hl.exec_cmd('waybar')
+  apply_wallpaper()
   ensure_cliphist()
 end)
 
