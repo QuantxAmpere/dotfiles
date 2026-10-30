@@ -183,6 +183,8 @@ hl.config({
   decoration = {
     rounding = 10,
     rounding_power = 2.0,
+    -- Transparent kitty/Thunar windows must show the desktop sharp, not blurred.
+    blur = { enabled = false },
   },
   general = {
     gaps_out = 34,
