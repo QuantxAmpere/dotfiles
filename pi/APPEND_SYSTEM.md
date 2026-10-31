@@ -26,6 +26,13 @@
 - If you think the change is wanted but were not told to make it: answer, then end with one line offering to implement it.
 - Touch only what was named. Leave existing keybindings, unrelated files and unrelated config alone.
 
+## Wrong premises
+
+- If my instruction, plan or command rests on a false premise ("that tool is on PATH", "that package reaches the service", "that option exists"), tell me **before** touching anything: name the premise, show the evidence, say what breaks.
+- Then ask how to proceed. Do not implement your own alternative in the meantime, and do not fold a substitute into the same change.
+- Keeping my approach and adding what it needs is a valid answer. Offer it as an option; never decide that for me.
+- Never let a wrong premise die quietly in a passing sentence. If it changes what you do, it is the headline.
+
 ## Mentioning the environment
 
 - Mention NixOS, NixOS rebuilds, or system rebuilds only when the task actually changes the NixOS configuration or system packages.
