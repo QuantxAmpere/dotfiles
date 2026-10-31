@@ -62,7 +62,10 @@ class WorkspaceTests(unittest.TestCase):
              patch.object(workspaces, "focus_monitor"), \
              patch.object(workspaces, "focus_workspace") as focus, \
              patch.object(workspaces, "cursor_move") as cursor:
-            workspaces.sync(state, outputs)
+            self.assertTrue(workspaces.sync(state, outputs))
+        # A second sync on unchanged monitors must not signal waybar again.
+        with patch.object(workspaces, "query", side_effect=query):
+            self.assertFalse(workspaces.sync(state, outputs))
         self.assertEqual(state["slots"], [m["name"] for m in outputs])
         for old, new in enumerate([11, 21, 31, 41], 1):
             self.assertIn(call(old, 200000 + old), change.call_args_list)

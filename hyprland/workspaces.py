@@ -97,10 +97,11 @@ def owner_for(wid, monitor, old_slots, owners):
 
 
 def sync(state, monitors):
+    """Renumber workspaces for the current monitor order; True if any id moved."""
     names = [m["name"] for m in monitors]
     old_slots = state.get("slots", [])
     if names == old_slots:
-        return
+        return False
     owners = state.setdefault("owners", {})
     for name in names:
         if name not in owners:
@@ -154,6 +155,7 @@ def sync(state, monitors):
     if cursor and "x" in cursor and "y" in cursor:
         cursor_move(cursor["x"], cursor["y"])
     state["slots"] = names
+    return bool(transfers)
 
 
 def main():
@@ -175,7 +177,11 @@ def main():
         monitors = monitor_list()
         if not monitors:
             return
-        sync(state, monitors)
+        if sync(state, monitors):
+            # Waybar 0.15 ignores Hyprland's changeworkspaceid event, so a
+            # renumbered workspace keeps its boot name ("1") and falls back to
+            # the "•" icon. A reload makes it re-read the names.
+            subprocess.run(["pkill", "-USR2", "waybar"], check=False)
         path.write_text(json.dumps(state))
         if action == "sync":
             return
