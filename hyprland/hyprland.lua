@@ -44,7 +44,8 @@ hl.window_rule({
 -- fuzzel -> "Set Wallpaper" drives. Every apply stores the image in
 -- ~/.local/state/wallpaper, which is what login and new outputs reuse.
 local function apply_wallpaper()
-  hl.exec_cmd([=[sh -c 'p="$HOME/.local/state/wallpaper"; test -s "$p" && exec "$HOME/.config/hypr/wallpaper.sh" "$(cat "$p")"']=])
+  hl.exec_cmd(
+    [=[sh -c 'p="$HOME/.local/state/wallpaper"; test -s "$p" && exec "$HOME/.config/hypr/wallpaper.sh" "$(cat "$p")"']=])
 end
 
 hl.on('monitor.added', apply_wallpaper)
@@ -128,7 +129,7 @@ hl.bind('XF86AudioRaiseVolume', hl.dsp.exec_cmd('wpctl set-volume -l 1 @DEFAULT_
 -- Plain Ctrl+V pastes it; the timestamp filename is what the picker shows.
 hl.bind('SUPER + SHIFT + S',
   hl.dsp.exec_cmd(
-  [[sh -c 'd="$HOME/Pictures/Screenshots"; mkdir -p "$d"; f="$d/$(date +%F_%H.%M.%S).png"; grim -g "$(slurp)" "$f" && wl-copy < "$f"']]))
+    [[sh -c 'd="$HOME/Pictures/Screenshots"; mkdir -p "$d"; f="$d/$(date +%F_%H.%M.%S).png"; grim -g "$(slurp)" "$f" && wl-copy < "$f"']]))
 
 -- Clipboard history: screenshots with timestamps, then copied text.
 hl.bind('SHIFT + ALT + V', hl.dsp.exec_cmd('$HOME/.config/hypr/clip-pick.sh'))
@@ -186,7 +187,11 @@ hl.config({
     rounding = 10,
     rounding_power = 2.0,
     -- Transparent kitty/Thunar windows must show the desktop sharp, not blurred.
-    blur = { enabled = false },
+    blur = {
+      enabled = true,
+      size = 5,
+      passes = 2
+    },
   },
   general = {
     gaps_out = 34,
