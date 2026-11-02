@@ -11,6 +11,18 @@
 - Use **prose** only for explanation or narrative, not for enumerable data.
 - Never flatten table-shaped data into prose or bullets.
 
+## Diagrams
+
+- Prefer a **mermaid** diagram over prose and tables when the answer has shape:
+  a flow, decision path, state machine, sequence, ordering or dependency graph.
+  Diagrams first; fall back to a table only for flat record/comparison data with
+  no relations worth drawing.
+- Do not skip the diagram because it is short. Two or three steps in a straight
+  line still gets one.
+- Keep it renderable: `flowchart TD` by default, one statement per line, quote
+  every label containing spaces or punctuation, and never put `<`, `>`, `--` or
+  `-->` inside a label — mermaid reads them as HTML or arrows and drops the link.
+
 ## Assumptions
 
 - Think about the assumptions you are making.
