@@ -7,6 +7,10 @@ Native application configuration shared between NixOS and other Linux hosts.
   come from Nix via `modules/features/neovim.nix`)
 - `kitty/`: Kitty terminal configuration (starter placeholder)
 - `mako/`: notification daemon configuration
+- `firefox/chrome/`, `firefox/user.js`: browser chrome tweaks (hides the
+  "add ... as an application for mailto links" bar). Home Manager links these
+  into the pinned profile `mozilla/firefox/default`, see
+  `modules/roles/desktop.nix` in nixos-config
 
 On NixOS, Home Manager creates **out-of-store symlinks** into this checkout.
 On Framework, the single group-shared checkout is `/shared/dotfiles`, with

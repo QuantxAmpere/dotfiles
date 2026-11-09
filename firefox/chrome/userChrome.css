@@ -1,0 +1,11 @@
+/* Firefox chrome styling. The profile's chrome/ directory is a symlink to this
+   one (home/firefox.nix in nixos-config); changes apply after restarting
+   Firefox. */
+
+/* Firefox has no setting to turn this off (bug 1728275, WONTFIX), and sites
+   like SoGo call navigator.registerProtocolHandler("mailto", ...) on every page
+   load, so the "Add ... as an application for mailto links?" bar returns after
+   every reload. Hide the bar instead of answering it. */
+*|notification-message[value="Protocol Registration: mailto"] {
+  display: none !important;
+}
