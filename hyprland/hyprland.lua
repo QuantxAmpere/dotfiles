@@ -60,9 +60,11 @@ end
 hl.on('hyprland.start', function()
   hl.exec_cmd('kitty --class HeadlessKitty --single-instance --start-as=hidden tail -f /dev/null')
   -- Home Manager provides Waybar on local and headless sessions alike. It
-  -- segfaults now and then (its wireplumber module, and a GTK monitor race on
-  -- output changes) and Hyprland starts it only once, so keep it alive here.
-  hl.exec_cmd([[sh -c 'while :; do waybar; sleep 2; done']])
+  -- segfaults now and then and Hyprland starts it only once, so keep it alive
+  -- here. A new waybar owns org.kde.StatusNotifierWatcher again, and Electron
+  -- apps re-register their tray icon exactly once: if that attempt fails they
+  -- never publish one again, so give Signal a fresh start with the new bar.
+  hl.exec_cmd([[sh -c 'while :; do waybar; systemctl --user try-restart signal-desktop; sleep 2; done']])
   apply_wallpaper()
   ensure_cliphist()
 end)
