@@ -191,7 +191,7 @@ hl.config({
     -- Transparent kitty/Thunar windows must show the desktop sharp, not blurred.
     blur = {
       enabled = true,
-      size = 5,
+      size = 3,
       passes = 2
     },
   },
