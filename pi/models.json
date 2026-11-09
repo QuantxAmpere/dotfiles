@@ -25,10 +25,23 @@
           "maxTokens": 32768,
           "cost": {
             "input": 0.15,
-            "output": 0.60,
+            "output": 0.6,
             "cacheRead": 0.003,
             "cacheWrite": 0
           }
+        }
+      ]
+    },
+    "ollama": {
+      "baseUrl": "http://localhost:11434/v1",
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "models": [
+        {
+          "id": "spark26",
+          "name": "Spark-X2.6-4B (local Q4_K_M)",
+          "contextWindow": 98304,
+          "maxTokens": 8192
         }
       ]
     }
