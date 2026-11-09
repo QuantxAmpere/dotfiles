@@ -34,7 +34,7 @@ hl.window_rule({
 
 -- Thunar opens as a fixed-size floating window, centered on the active monitor.
 hl.window_rule({
-  match = { class = 'thunar' },
+  match = { class = '^Thunar$' }, -- class matching is case-sensitive
   size = '1280 720',
   center = true,
   float = true,
