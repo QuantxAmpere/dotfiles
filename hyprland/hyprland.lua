@@ -34,7 +34,8 @@ hl.window_rule({
 
 -- Thunar opens as a fixed-size floating window, centered on the active monitor.
 hl.window_rule({
-  match = { class = '^Thunar$' }, -- class matching is case-sensitive
+  -- Native Wayland Thunar reports app id 'thunar'; XWayland reports 'Thunar'.
+  match = { class = '^[Tt]hunar$' },
   size = '1280 720',
   center = true,
   float = true,
