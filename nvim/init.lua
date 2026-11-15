@@ -21,7 +21,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = { "*.lua", "*.cpp", "*.h", "*.html", "*.ts", "*.tsx", "*.js", "*.jsx", "*.go" },
+  pattern = { "*.lua", "*.cpp", "*.h", "*.html", "*.ts", "*.tsx", "*.js", "*.jsx", "*.go", "*.astro" },
   callback = function()
     vim.lsp.buf.format({ async = false })
   end,
@@ -162,6 +162,7 @@ require('mini.pick').setup({})
 
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
+vim.lsp.config('*', { capabilities = capabilities })
 
 vim.lsp.config("lua_ls", {
   capabilities = capabilities,
@@ -190,26 +191,30 @@ vim.lsp.enable({
   "nixd",
   "pyright",
   "clangd",
-  -- "typescript",
   "ts_ls",
-  "tailwind",
+  "astro",
+  "tailwindcss",
   "texlab",
+})
+
+-- astro-ls only looks for TypeScript in the project's node_modules. Projects
+-- without it fall back to the system typescript from neovim.nix (ts_ls finds
+-- that one on PATH by itself).
+vim.lsp.config("astro", {
+  before_init = function(_, config)
+    local tsdk = require('lspconfig.util').get_typescript_server_path(config.root_dir)
+    if tsdk == "" then
+      local tsserver = vim.fn.exepath("tsserver")
+      if tsserver ~= "" then
+        tsdk = vim.fs.dirname(vim.fn.resolve(tsserver)) .. "/../lib/node_modules/typescript/lib"
+      end
+    end
+    config.init_options.typescript.tsdk = tsdk
+  end,
 })
 
 vim.lsp.config("clangd", {
   capabilities = capabilities,
-})
-
-vim.lsp.config('typescript', {
-  cmd = { 'typescript-language-server', '--stdio' },
-  filetypes = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
-  root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json' },
-})
-
-vim.lsp.config('tailwind', {
-  cmd = { 'tailwindcss-language-server', '--stdio' },
-  filetypes = { 'ts', 'typescript', 'css', 'typescriptreact', 'tsx' },
-  root_markers = { 'package.json' },
 })
 
 -- nixd resolves <nixpkgs> through nix.settings.nix-path (flake-pinned).
