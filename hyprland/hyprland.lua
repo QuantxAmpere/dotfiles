@@ -150,6 +150,10 @@ if hl.plugin.hy3 then
     plugin = { hy3 = { node_collapse_policy = 0 } },
   })
 
+  -- Tab bar colors follow the active system theme (~/system-theme), which
+  -- also pushes them live with `hyprctl eval` when the theme changes.
+  pcall(dofile, os.getenv('HOME') .. '/.config/system-theme/current/hyprland-theme.lua')
+
   hl.bind('SUPER + T', hy3.change_group('toggletab'))
   hl.bind('SUPER + H', hy3.change_group('h'))
   hl.bind('SUPER + V', hy3.change_group('v'))
