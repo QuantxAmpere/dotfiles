@@ -60,7 +60,8 @@ vim.pack.add({
   { src = "https://github.com/nvim-mini/mini.surround" },
   { src = "https://github.com/nvim-mini/mini.pairs" },
   { src = "https://github.com/nvim-mini/mini.pick" },
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+  -- master is archived and breaks on Neovim 0.12; main needs tree-sitter-cli.
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
   { src = "https://github.com/hrsh7th/nvim-cmp" },
   { src = "https://github.com/hrsh7th/cmp-path" },
   { src = "https://github.com/hrsh7th/cmp-nvim-lsp" },
@@ -89,43 +90,42 @@ require("mini.surround").setup({
 })
 
 
-require('nvim-treesitter.configs').setup({
-  -- Install parsers automatically
-  ensure_installed = {
-    "lua",
-    "cpp",
-    "python",
-    "javascript",
-    "typescript",
-    "tsx",
-    "html",
-    "css",
-    "go",
-    "gomod",
-    "gowork",
-    "json",
-    "bash",
-    "nix",
-  },
+-- nvim-treesitter (main) only installs parsers and queries; Neovim itself
+-- highlights, so each buffer has to start treesitter on its own.
+require('nvim-treesitter').install({
+  "lua",
+  "cpp",
+  "python",
+  "javascript",
+  "typescript",
+  "tsx",
+  "html",
+  "css",
+  "go",
+  "gomod",
+  "gowork",
+  "json",
+  "bash",
+  "nix",
+  "markdown",
+  "markdown_inline",
+  "astro",
+})
 
-  highlight = {
-    enable = true,                             -- enable treesitter-based syntax highlighting
-    additional_vim_regex_highlighting = false, -- disables legacy regex highlighting
-  },
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Treesitter highlighting, indentation and incremental selection',
+  callback = function(args)
+    if not pcall(vim.treesitter.start, args.buf) then return end -- no parser
+    vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<CR>",      -- start selection
-      node_incremental = "<Tab>",   -- expand to next node
-      node_decremental = "<S-Tab>", -- shrink selection
-      scope_incremental = "<S-CR>", -- expand to parent scope
-    },
-  },
-
-  indent = {
-    enable = true, -- enable treesitter-based indentation
-  },
+    -- Incremental selection through Neovim's built-in an/in (:h v_an).
+    local function map(mode, lhs, rhs, desc)
+      vim.keymap.set(mode, lhs, rhs, { buffer = args.buf, remap = true, desc = desc })
+    end
+    map('n', '<CR>', 'van', 'Start node selection')
+    map('x', '<Tab>', 'an', 'Expand to parent node')
+    map('x', '<S-Tab>', 'in', 'Shrink to child node')
+  end,
 })
 
 
