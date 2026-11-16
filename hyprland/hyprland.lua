@@ -191,13 +191,13 @@ require('workspaces')
 
 hl.config({
   decoration = {
-    rounding = 10,
+    rounding = 15,
     rounding_power = 2.0,
     -- Transparent kitty/Thunar windows must show the desktop sharp, not blurred.
     blur = {
-      enabled = true,
-      size = 3,
-      passes = 2
+      enabled = false,
+      size = 1,
+      passes = 1
     },
   },
   general = {
