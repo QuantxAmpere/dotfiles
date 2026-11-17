@@ -41,6 +41,15 @@ hl.window_rule({
   float = true,
 })
 
+-- Super+Ctrl+Return kitty: its own class, so it floats at a fixed size while
+-- plain Super+Return kitty keeps tiling.
+hl.window_rule({
+  match = { class = '^kitty-float$' },
+  size = '1920 1080',
+  center = true,
+  float = true,
+})
+
 -- Wallpaper: swaybg is started by wallpaper.sh, which Super+Shift+Return ->
 -- fuzzel -> "Set Wallpaper" drives. Every apply stores the image in
 -- ~/.local/state/wallpaper, which is what login and new outputs reuse.
@@ -74,6 +83,7 @@ ensure_cliphist()
 
 -- General shortcuts work even if hy3 is temporarily unavailable.
 hl.bind('SUPER + Return', hl.dsp.exec_cmd('kitty'))
+hl.bind('SUPER + CTRL + Return', hl.dsp.exec_cmd('kitty --class kitty-float'))
 hl.bind('SUPER + SHIFT + Return', hl.dsp.exec_cmd('fuzzel'))
 hl.bind('SUPER + Q', hl.dsp.window.close())
 hl.bind('SUPER + M', hl.dsp.exit())
